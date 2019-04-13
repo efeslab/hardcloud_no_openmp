@@ -1,5 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <time.h>
 #include <x86intrin.h>
 #include <hardcloud/hardcloud_app.h>
 
@@ -45,17 +48,18 @@ int main(int argc, char *argv[])
     input[i] = i;
   }
 
-  unsigned long long t1 = __rdtsc();
+  printf("allocation done\n");
+  getchar();
 
+  struct timespec ts1, ts2;
+  timespec_get(&ts1, TIME_UTC);
   app.run();
+  timespec_get(&ts2, TIME_UTC);
 
-  unsigned long long t2 = __rdtsc();
+  double t = (ts2.tv_sec*1000000 + ts2.tv_nsec/1000) - (ts1.tv_sec*1000000 + ts1.tv_nsec/1000);
 
-  printf("Final hash: ");
-  for (int i = 0; i < 8; i++) {
-    printf("%016llx",(unsigned long long) output[7 - i]);
-  }
-  printf("\nclk: %llu\n", t2 - t1);
+  printf("time: %lf ms\n", t/1000);
+  printf("throughput: %lf MB/s\n", 1.0*ni*sizeof(uint64_t)/1024.0/1024.0/(t/1000000));
 
   app.delete_buffer(input);
   app.delete_buffer(output);
