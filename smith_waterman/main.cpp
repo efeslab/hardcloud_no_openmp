@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     data_in[i] = i%4;
   }
 
+  printf("allocation done\n");
   getchar();
 
   struct timespec ts1, ts2;
