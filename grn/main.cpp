@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <cmath>
 #include <x86intrin.h>
+#include <time.h>
 #include <hardcloud/hardcloud_app.h>
 
 size_t cmdarg_get(const char *arg) {
@@ -28,11 +29,17 @@ int main(int argc, char *argv[])
 
   HardcloudApp app;
 
-  unsigned long long t1 = __rdtsc();
   results = (int *) app.alloc_buffer(out_size * sizeof(int));
-  unsigned long long t2 = __rdtsc();
 
-  printf("\nclk: %llu\n", t2 - t1);
+  struct timespec ts1, ts2;
+  timespec_get(&ts1, TIME_UTC);
+  app.run();
+  timespec_get(&ts2, TIME_UTC);
+
+  double t = (ts2.tv_sec*1000000 + ts2.tv_nsec/1000) - (ts1.tv_sec*1000000 + ts1.tv_nsec/1000);
+
+  printf("time: %lf ms\n", t/1000);
+  printf("throughput: %lf MB/s\n", 1.0*out_size*sizeof(int)/1024.0/1024.0/(t/1000000));
 
   app.delete_buffer(results);
 
