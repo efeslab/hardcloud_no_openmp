@@ -45,6 +45,8 @@ int main(int argc, char *argv[])
     data_in[i] = i%4;
   }
 
+  getchar();
+
   struct timespec ts1, ts2;
   timespce_get(&ts1, TIME_UTC);
   app.run();

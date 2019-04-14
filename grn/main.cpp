@@ -31,6 +31,8 @@ int main(int argc, char *argv[])
 
   results = (int *) app.alloc_buffer(out_size * sizeof(int));
 
+  getchar();
+
   struct timespec ts1, ts2;
   timespec_get(&ts1, TIME_UTC);
   app.run();

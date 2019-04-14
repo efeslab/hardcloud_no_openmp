@@ -43,6 +43,8 @@ int main(int argc, char *argv[])
     data_in[i] = rand();
   }
 
+  getchar();
+
   struct timespec ts1, ts2;
   timespec_get(&ts1, TIME_UTC);
   app.run();

@@ -45,6 +45,8 @@ int main(int argc, char *argv[])
     input[2*k + 1] = k;
   }
 
+  getchar();
+
   struct timespec ts1, ts2;
   timespec_get(&ts1, TIME_UTC);
   app.run();
