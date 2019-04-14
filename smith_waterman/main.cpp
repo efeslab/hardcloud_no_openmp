@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
   getchar();
 
   struct timespec ts1, ts2;
-  timespce_get(&ts1, TIME_UTC);
+  timespec_get(&ts1, TIME_UTC);
   app.run();
   timespec_get(&ts2, TIME_UTC);
 
