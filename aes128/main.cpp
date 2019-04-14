@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
     pt[i] = (uint64_t)rand()<< 32 & rand();
   }
 
+  printf("allocation done\n");
   getchar();
 
   struct timespec ts1, ts2;
