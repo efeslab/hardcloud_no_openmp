@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
+#include <time.h>
 #include <x86intrin.h>
 #include <hardcloud/hardcloud_app.h>
 
