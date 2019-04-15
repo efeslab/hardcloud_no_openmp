@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
     input[2*k + 1] = k;
   }
 
+  printf("allocation done\n");
   getchar();
 
   struct timespec ts1, ts2;

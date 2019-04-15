@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 
   results = (int *) app.alloc_buffer(out_size * sizeof(int));
 
+  printf("allocation done\n");
   getchar();
 
   struct timespec ts1, ts2;
