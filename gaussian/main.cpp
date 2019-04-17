@@ -1,58 +1,28 @@
 #include <iostream>
 #include <math.h>
-#include "harp.h"
+#include <time.h>
+#include <hardcloud/hardcloud_app.h>
+
 #include "image.h"
 
-void gaussian(
-  unsigned int* image_in,
-  unsigned int* image_out,
-  unsigned int width,
-  unsigned int height)
-{
-  // filter coefficients
-  float G[3][3] =
-    {{1.0/16, 1.0/8, 1.0/16},
-    {1.0/8, 1.0/4, 1.0/8},
-    {1.0/16, 1.0/8, 1.0/16}};
-
-  for (int x = 0; x < height; x++)
-  {
-    for (int y = 0; y < width; y++)
-    {
-      bool is_out_of_bounds = false;
-      if ((x == 0) |
-          (y == 0) |
-          (x == width - 1) |
-          (y == height - 1)) {
-        is_out_of_bounds = true;
-      }
-
-      int r = 0;
-      int g = 0;
-      int b = 0;
-      for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-
-          if (!is_out_of_bounds) {
-            unsigned int position = (x - 1 + j)*width + (y - 1 + i);
-
-            r += G[i][j]*(image_in[position] & 0xff);
-            g += G[i][j]*((image_in[position] >>  8) & 0xff);
-            b += G[i][j]*((image_in[position] >> 16) & 0xff);
-          }
-        }
-      }
-
-      image_out[x*width + y] =
-        (r & 0xff) |
-        (g & 0xff) << 8 |
-        (b & 0xff) << 16;
-    }
-  }
+size_t cmdarg_getsize(const char *arg) {
+    size_t l = strlen(arg);
+    uint64_t n = atoll(arg);
+    return n;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+  int rounds;
+
+  if (argc < 2) {
+      printf("usage: %s size\n", argv[0]);
+      return -1;
+  }
+  else {
+      rounds = cmdarg_getsize(argv[1]);
+  }
+
   std::string file_input("input.png");
   std::string file_output("output.png");
 
@@ -65,17 +35,33 @@ int main()
   unsigned int* image_in  = image.array_in;
   unsigned int* image_out = image.array_out;
 
-  #pragma omp target device(TARGET) map(to: image_in[:size]) map(from: image_out[:size])
-  #pragma omp parallel use(hrw) module(gaussian)
-  {
-    image_out[0] = image_in[0];
+  HardcloudApp app;
 
-    gaussian(image_in, image_out, height, width);
+  unsigned int *out_buf = (unsigned int*)app.alloc_buffer(size*sizeof(unsigned int));
+  unsigned int *in_buf = (unsigned int*)app.alloc_buffer(size*sizeof(unsigned int));
+
+  memcpy(in_buf, image_in, size*sizeof(unsigned int));
+
+  printf("allocation done\n");
+  getchar();
+
+  for (int i = 0; i < rounds; i++) {
+  struct timespec ts1, ts2;
+  timespec_get(&ts1, TIME_UTC);
+    app.run();
+  timespec_get(&ts2, TIME_UTC);
+
+  double t = (ts2.tv_sec*1000000 + ts2.tv_nsec/1000) - (ts1.tv_sec*1000000 + ts1.tv_nsec/1000);
+
+  printf("time: %lf ms\n", t/1000);
+  printf("throughput: %lf fig/s\n", 1.0*rounds/(t/1000000));
   }
 
-  image.map_back();
+//  memcpy(image_out, out_buf, size*sizeof(unsigned int));
 
-  image.write_png_file(file_output);
+//  image.map_back();
+
+//  image.write_png_file(file_output);
 
   return 0;
 }
