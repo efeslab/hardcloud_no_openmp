@@ -45,17 +45,17 @@ int main(int argc, char *argv[])
   printf("allocation done\n");
   getchar();
 
-  for (int i = 0; i < rounds; i++) {
   struct timespec ts1, ts2;
   timespec_get(&ts1, TIME_UTC);
+  for (int i = 0; i < rounds; i++) {
     app.run();
+  }
   timespec_get(&ts2, TIME_UTC);
 
   double t = (ts2.tv_sec*1000000 + ts2.tv_nsec/1000) - (ts1.tv_sec*1000000 + ts1.tv_nsec/1000);
 
   printf("time: %lf ms\n", t/1000);
   printf("throughput: %lf fig/s\n", 1.0*rounds/(t/1000000));
-  }
 
 //  memcpy(image_out, out_buf, size*sizeof(unsigned int));
 

@@ -36,14 +36,15 @@ int main(int argc, char *argv[])
 
   struct timespec ts1, ts2;
   timespec_get(&ts1, TIME_UTC);
+  for (int i=0; i<100; i++) {
   app.run();
+  }
   timespec_get(&ts2, TIME_UTC);
 
   double t = (ts2.tv_sec*1000000 + ts2.tv_nsec/1000) - (ts1.tv_sec*1000000 + ts1.tv_nsec/1000);
 
   printf("time: %lf ms\n", t/1000);
-  printf("throughput: %lf MB/s\n", 1.0*out_size*sizeof(int)/1024.0/1024.0/(t/1000000));
-
+  printf("throughput: %lf MB/s\n", 100*1.0*out_size*sizeof(int)/1024.0/1024.0/(t/1000000));
   app.delete_buffer(results);
 
   return 0;
