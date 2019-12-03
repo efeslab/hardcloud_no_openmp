@@ -1,6 +1,6 @@
 CXX = g++
 ARGS = -O2
-LIBS = -lvai-c -lhardcloud -lMPF_VAI
+LIBS = -lvai-c-ase -lhardcloud -lMPF_VAI
 TARGET = sha512
 SRCS = main.cpp
 SRCS_FILES = $(foreach F, $(SRCS), $(F))

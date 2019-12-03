@@ -1,6 +1,6 @@
 CXX = g++
-ARGS = -O2
-LIBS = -lvai-c -lhardcloud -lMPF_VAI
+ARGS = -O2 -g
+LIBS = -lvai-c-ase -lhardcloud -lMPF_VAI
 TARGET = fir
 SRCS = main.cpp
 SRCS_FILES = $(foreach F, $(SRCS), $(F))
