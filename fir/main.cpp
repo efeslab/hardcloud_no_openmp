@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
     data_in[i] = rand();
   }
 
+  printf("allocation done\n");
   getchar();
 
   struct timespec ts1, ts2;

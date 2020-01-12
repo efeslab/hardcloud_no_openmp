@@ -1,6 +1,6 @@
 CXX = g++
 ARGS = -O2
-LIBS = -lvai-c -lhardcloud -lMPF_VAI
+LIBS = -lopae-c -lhardcloud -lMPF
 TARGET = reed_solomon_decoder
 SRCS = main.cpp
 SRCS_FILES = $(foreach F, $(SRCS), $(F))

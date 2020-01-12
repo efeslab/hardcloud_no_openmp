@@ -49,7 +49,6 @@ int main(int argc, char *argv[])
   }
 
   printf("allocation done\n");
-  getchar();
 
   struct timespec ts1, ts2;
   timespec_get(&ts1, TIME_UTC);
@@ -60,6 +59,11 @@ int main(int argc, char *argv[])
 
   printf("time: %lf ms\n", t/1000);
   printf("throughput: %lf MB/s\n", 1.0*ni*sizeof(uint64_t)/1024.0/1024.0/(t/1000000));
+  printf("hash value: ");
+  for (uint64_t i = 0; i < 8; i++) {
+      printf("%llx", output[i]);
+  }
+  printf("\n");
 
   app.delete_buffer(input);
   app.delete_buffer(output);
