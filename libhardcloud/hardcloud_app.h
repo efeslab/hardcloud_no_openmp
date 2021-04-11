@@ -41,12 +41,17 @@ private:
   VAI_SVC_WRAPPER* fpga;
   std::deque<Buffer> buffers;
 
+  uint64_t csr_offset;
+  bool opsim;
+
   int init();
+  int opinit();
   int finish();
 
 public:
 
   HardcloudApp();
+  HardcloudApp(bool opsim);
   ~HardcloudApp();
 
   void* alloc_buffer(uint64_t size);
